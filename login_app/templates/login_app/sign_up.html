@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'login_app/login_app.css' %}" media="screen"/>
+    <title>Sign up</title>
+</head>
+<body>
+<div class="box">
+
+    <h1> Sign up </h1>  
+
+
+    
+    <form action="{% url 'login_app:sign_up' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="user" placeholder="Username here" /><br><br>
+        <input type="email" name="email" placeholder="Email here" /><br><br>
+        <input type="password" name="pass" placeholder="Password here" /><br><br>
+        <input type="password" name="repeat_pass" placeholder="Password here" /><br><br>
+        <select name="user_type" class="selectpicker" >
+           {% for type , value in access_level.type_of_user%}
+                <option value="{{ type }}"{% if access_level.type_of_user.value == type %} selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Sign up</button>
+    </form><br>
+
+    <a href="{% url 'login_app:login' %}"> Back to Login</a>
+
+    {% if error %}
+    {{ error }}
+    {% endif %}
+    </div>
+</body>
+</html>

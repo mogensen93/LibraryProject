@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'library_app/library_app.css' %}" media="screen"/>
+    <title>Document</title>
+</head>
+<body>
+   <div class="navigation">
+    <h1>Units that are loaned out</h1> 
+     <div class="flex">
+    <a href="{% url 'library_app:index' %}"><button>Profile</button> </a><br>
+    <a href="{% url 'library_app:outstanding' %}"><button>Outstanding</button> </a><br>
+    <a href="{% url 'library_app:library' %}"><button>Library</button> </a>
+    </div> </div>
+
+     <div class="bodyDiv"> 
+    <div class="halfViewWidth">
+    <h2>Magazines </h2>
+    <h3>Loaned out: {{count_mags}}</h3>
+    {% for mag in mags %}
+        <hr>
+         <h4>{{ mag.title }}</h4>
+    <p>
+        Loaner: {{mag.loaner}}<br>
+        Date of loan: {{mag.loaned_date | date:"d F, Y"}}<br>
+         <b>Return before: {{mag.return_date | date:"d F, Y"}}</b></p>
+
+        <form action="{% url 'library_app:unloan_magazine' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="pk" value="{{mag.pk}}"> 
+            <button>Unloan</button>
+        </form> 
+    {% endfor %}
+
+</div>
+ <div class="halfViewWidth">
+    <h2>Books </h2>
+      <h3>Loaned out: {{count_books}}</h3>
+    {% for book in books %}
+        <hr>
+        <h4>{{ book.title }}</h4>
+
+        <p>Loaner: {{book.loaner}}<br>
+        Date of loan: {{book.loaned_date | date:"d F, Y"}}<br>
+        <b>Return before: {{book.return_date | date:"d F, Y"}}</b></p>
+
+        <form action="{% url 'library_app:unloan_book' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="pk" value="{{book.pk}}"> 
+            <button>Unloan</button>
+        </form> 
+    {% endfor %}
+ 
+   </div>
+    </div>
+</body>
+</html>

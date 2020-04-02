@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'library_app/library_app.css' %}" media="screen"/>
+    <title>Document</title>
+</head>
+<body>
+<div class="navigation">
+    
+    <h1>The Library</h1>
+    <h2>{{ limit_loan_max }}</h2>
+     <div class="flex">
+    {% for x in user_type%}
+
+        {% if x.access_level == 'S' %}
+       
+       <a href="{% url 'library_app:loaned_units' %}"><button>See Status</button> </a><br>
+        {% endif %}
+
+        {% if x.access_level == 'C' %}
+       
+        {% endif %}
+
+    {% endfor %}  
+    <a href="{% url 'library_app:index' %}"><button>Return to Profile</button> </a>
+    </div></div>
+     
+   <div class="bodyDiv">
+   
+ <div class="halfViewWidth">
+
+    <h2>Magazines </h2>
+    <h3>Avalible: {{count_mags}}</h3>
+   
+    
+    {% for book in expired %}
+    <h3> {{book.title}} </h3>
+    {% endfor %}
+
+    {% for mag in mags %}
+    <hr>
+    <h4>{{ mag.title }}</h4>
+    <p>{{ mag.description }}<br><br>
+    Written by {{mag.user}}<br>
+    publish date: {{ mag.publish_date | date:"d F, Y" }}<br></p>
+   
+   <form action="{% url 'library_app:loan_magazine' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{mag.pk}}"> 
+        <button>Loan</button>
+    </form> 
+    
+    {% endfor %}
+
+    </div>
+    <div class="halfViewWidth">
+    <h2>Books </h2>
+    <h3>Avalible: {{count_books}}</h3>
+    
+    {% for book in expired %}
+    <h3> {{book.title}} </h3>
+    {% endfor %}
+
+    {% for book in books %}
+    <hr>
+    <h4>{{ book.title }}</h4>
+    <p>{{ book.description }}<br><br>
+    Written by {{book.user}}<br>
+    Publish date: {{ book.publish_date | date:"d F, Y" }}<br></p>
+
+   
+   <form action="{% url 'library_app:loan_book' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{book.pk}}"> 
+        <button>Loan</button>
+    </form> 
+    
+    {% endfor %}
+ 
+</div></div>
+    
+</body>
+</html>
